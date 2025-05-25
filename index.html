@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Receipt Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Rent Receipt Generator</h1>
+    
+    <div class="main-container">
+        <div class="container">
+            <form id="receiptForm">
+                <div class="form-group">
+                    <label for="tenantName">Tenant Name:</label>
+                    <input type="text" id="tenantName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="landlordName">Landlord Name:</label>
+                    <input type="text" id="landlordName" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rentAmount">Rent Amount:</label>
+                        <input type="number" id="rentAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency Symbol:</label>
+                        <input type="text" id="currency" value="₹" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address:</label>
+                    <textarea id="propertyAddress" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startMonth">Start Month:</label>
+                        <select id="startMonth" required>
+                            <option value="">Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startYear">Start Year:</label>
+                        <input type="number" id="startYear" min="2020" max="2030" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="numMonths">Number of Months:</label>
+                        <input type="number" id="numMonths" min="1" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="landlordPAN">Landlord PAN (Optional):</label>
+                        <input type="text" id="landlordPAN" placeholder="e.g., ABCDE1234F">
+                    </div>
+                </div>
+
+                <div class="pdf-options">
+                    <h4 style="margin-top: 0;">PDF Layout Options:</h4>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="multiplePerPage">
+                        <label for="multiplePerPage">Multiple receipts per page (2 receipts per page)</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="receiptsPerPage">Receipts per page (if multiple per page is checked):</label>
+                        <select id="receiptsPerPage">
+                            <option value="2">2 receipts per page</option>
+                            <option value="3">3 receipts per page</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="button" onclick="generateReceipts()">Generate Rent Receipts PDF</button>
+            </form>
+        </div>
+
+        <div class="preview">
+            <h3>Live Preview:</h3>
+            <div id="previewContent">
+                <p style="color: #666; font-style: italic;">Fill in the form to see live preview of your rent receipts...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
