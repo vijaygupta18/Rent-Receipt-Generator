@@ -3,105 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rent Receipt Generator</title>
+    <title>Rent Receipts — HRA-compliant receipts in under a minute · Vijay Gupta</title>
+    <meta name="description" content="Generate HRA-compliant rent receipts in under a minute. Fill the form, download a clean PDF. Runs entirely in your browser — no signup, no uploads.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Rent Receipt Generator</h1>
-    
-    <div class="main-container">
-        <div class="container">
-            <form id="receiptForm">
-                <div class="form-group">
-                    <label for="tenantName">Tenant Name:</label>
-                    <input type="text" id="tenantName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="landlordName">Landlord Name:</label>
-                    <input type="text" id="landlordName" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="rentAmount">Rent Amount:</label>
-                        <input type="number" id="rentAmount" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="currency">Currency Symbol:</label>
-                        <input type="text" id="currency" value="₹" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="propertyAddress">Property Address:</label>
-                    <textarea id="propertyAddress" required></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="startMonth">Start Month:</label>
-                        <select id="startMonth" required>
-                            <option value="">Select Month</option>
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="startYear">Start Year:</label>
-                        <input type="number" id="startYear" min="2020" max="2030" required>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="numMonths">Number of Months:</label>
-                        <input type="number" id="numMonths" min="1" max="12" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="landlordPAN">Landlord PAN (Optional):</label>
-                        <input type="text" id="landlordPAN" placeholder="e.g., ABCDE1234F">
-                    </div>
-                </div>
-
-                <div class="pdf-options">
-                    <h4 style="margin-top: 0;">PDF Layout Options:</h4>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="multiplePerPage">
-                        <label for="multiplePerPage">Multiple receipts per page (2 receipts per page)</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="receiptsPerPage">Receipts per page (if multiple per page is checked):</label>
-                        <select id="receiptsPerPage">
-                            <option value="2">2 receipts per page</option>
-                            <option value="3">3 receipts per page</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <button type="button" onclick="generateReceipts()">Generate Rent Receipts PDF</button>
-            </form>
+    <header class="site-nav" role="banner">
+        <div class="nav-inner">
+            <a href="#" class="brand" aria-label="Vijay Gupta — tools">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden>
+                    <path d="M4 6h16M4 12h16M4 18h10"/>
+                </svg>
+                <span class="brand-name">vijay<span class="brand-dot">.</span>tools</span>
+            </a>
+            <nav class="nav-meta" aria-label="Site meta">
+                <span class="nav-breadcrumb"><span>Tools</span><span class="slash">/</span><span class="current">Rent Receipts</span></span>
+                <a href="https://github.com/vijaygupta18" class="nav-link" target="_blank" rel="noopener">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.8.4-1.2.7-1.5-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.5-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.5C20.2 21.4 23.5 17 23.5 12 23.5 5.6 18.4.5 12 .5z"/></svg>
+                    GitHub
+                </a>
+                <button type="button" class="nav-link nav-link-accent" data-open="support" aria-label="Buy me a coffee">
+                    <svg width="14" height="14" viewBox="2 7 20 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden>
+                        <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/>
+                    </svg>
+                    <span class="nav-link-label">Buy me a chai</span>
+                </button>
+            </nav>
         </div>
+    </header>
 
-        <div class="preview">
-            <h3>Live Preview:</h3>
-            <div id="previewContent">
-                <p style="color: #666; font-style: italic;">Fill in the form to see live preview of your rent receipts...</p>
+    <main>
+        <section class="hero">
+            <span class="eyebrow">
+                <span class="eyebrow-dot" aria-hidden></span>
+                HRA documentation · India
+            </span>
+            <h1 class="hero-title">
+                Rent receipts,
+                <span class="hero-title-accent">ready in under a minute.</span>
+            </h1>
+            <p class="hero-sub">
+                Fill the form. Download a clean, HRA-compliant PDF. No signup, no uploads — your data
+                never leaves the browser.
+            </p>
+            <div class="trust-row">
+                <span class="pill"><Dot/>Works offline</span>
+                <span class="pill"><Dot/>No signup</span>
+                <span class="pill"><Dot/>₹ / $ / € / any currency</span>
+                <span class="pill"><Dot/>Free</span>
+            </div>
+        </section>
+
+        <section class="workbench">
+            <div class="form-col">
+                <form id="receiptForm" class="form-card" autocomplete="off">
+                    <div class="form-head">
+                        <h2>Receipt details</h2>
+                        <p class="muted">Preview updates as you type.</p>
+                    </div>
+
+                    <fieldset class="field-group">
+                        <legend>Parties</legend>
+
+                        <div class="field">
+                            <label for="tenantName">Tenant name</label>
+                            <input type="text" id="tenantName" placeholder="e.g. Vijay Gupta" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="landlordName">Landlord name</label>
+                            <input type="text" id="landlordName" placeholder="e.g. Ramesh Kumar" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="landlordPAN">Landlord PAN <span class="hint">optional · required over ₹1L annual rent</span></label>
+                            <input type="text" id="landlordPAN" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase">
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="field-group">
+                        <legend>Property</legend>
+
+                        <div class="field">
+                            <label for="propertyAddress">Property address</label>
+                            <textarea id="propertyAddress" rows="3" placeholder="Flat 201, Maple Heights, MG Road, Bengaluru 560001" required></textarea>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="field-group">
+                        <legend>Rent &amp; period</legend>
+
+                        <div class="field-row">
+                            <div class="field field-grow">
+                                <label for="rentAmount">Rent amount</label>
+                                <input type="number" id="rentAmount" placeholder="25000" required min="0">
+                            </div>
+                            <div class="field field-narrow">
+                                <label for="currency">Currency</label>
+                                <input type="text" id="currency" value="₹" maxlength="3" required>
+                            </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field field-grow">
+                                <label for="startMonth">Start month</label>
+                                <select id="startMonth" required>
+                                    <option value="">Select month</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="field field-narrow">
+                                <label for="startYear">Year</label>
+                                <input type="number" id="startYear" min="2020" max="2035" required>
+                            </div>
+                            <div class="field field-narrow">
+                                <label for="numMonths">Months</label>
+                                <input type="number" id="numMonths" min="1" max="12" value="12" required>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="field-group">
+                        <legend>PDF layout</legend>
+                        <div class="segmented" role="radiogroup" aria-label="Receipts per page">
+                            <input type="radio" name="layoutMode" id="layoutSingle" value="single" checked>
+                            <label for="layoutSingle">1 per page</label>
+
+                            <input type="radio" name="layoutMode" id="layoutTwo" value="two">
+                            <label for="layoutTwo">2 per page</label>
+
+                            <input type="radio" name="layoutMode" id="layoutThree" value="three">
+                            <label for="layoutThree">3 per page</label>
+                        </div>
+                        <!-- hidden compatibility shims for legacy script.js -->
+                        <input type="checkbox" id="multiplePerPage" style="display:none">
+                        <select id="receiptsPerPage" style="display:none">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </fieldset>
+
+                    <div class="actions">
+                        <button type="button" id="downloadBtn" class="btn-primary">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download PDF
+                        </button>
+                        <button type="reset" class="btn-ghost">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <aside class="preview-col" aria-label="Live preview">
+                <div class="preview-head">
+                    <div>
+                        <span class="label-eyebrow">Live preview</span>
+                        <h3 class="preview-title" id="previewTitle">Empty receipt</h3>
+                    </div>
+                    <div class="preview-counter" id="previewCounter" aria-live="polite"></div>
+                </div>
+                <div class="preview-stage">
+                    <div id="previewContent" class="preview-content" aria-live="polite"></div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="info-strip">
+            <article>
+                <div class="info-num">01</div>
+                <h4>Fill once, generate many</h4>
+                <p>Enter details for a single month and pick how many months to repeat — dates and numbering increment for you.</p>
+            </article>
+            <article>
+                <div class="info-num">02</div>
+                <h4>Standard, accepted format</h4>
+                <p>Clean receipt layout with landlord PAN, property address, rent period, and signature block. The format employers and tax officers expect.</p>
+            </article>
+            <article>
+                <div class="info-num">03</div>
+                <h4>Privacy by default</h4>
+                <p>Nothing is sent to any server. The PDF is generated in your browser with jsPDF and saved straight to your Downloads folder.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-foot">
+        <div class="foot-inner">
+            <div>
+                <p class="foot-brand">
+                    <span class="brand-name">vijay<span class="brand-dot">.</span>tools</span>
+                </p>
+                <p class="foot-note">Small, sharp utilities for everyday paperwork. Made by
+                    <a href="https://github.com/vijaygupta18" target="_blank" rel="noopener">Vijay Gupta</a>.</p>
+            </div>
+            <div class="foot-legal">
+                <p>This generator produces receipts in the format commonly accepted for HRA claims in India. It does not constitute tax advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ===== Support FAB (ported from system-design-simulator) ===== -->
+    <button id="supportFab" class="support-fab" aria-label="Buy me a coffee" title="Buy me a coffee — support the project">
+        <svg viewBox="0 0 100 100" class="support-fab-arc" aria-hidden="true">
+            <defs>
+                <path id="bmcArc" d="M 16,50 A 34,34 0 0,1 84,50" fill="none"/>
+            </defs>
+            <text class="support-fab-text">
+                <textPath href="#bmcArc" startOffset="50%" text-anchor="middle">BUY ME A COFFEE</textPath>
+            </text>
+        </svg>
+        <svg class="support-fab-icon" viewBox="2 7 20 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/>
+        </svg>
+    </button>
+
+    <!-- ===== Support Dialog ===== -->
+    <div id="supportDialog" class="support-dialog" aria-hidden="true" role="dialog" aria-labelledby="supportTitle">
+        <div class="support-backdrop" data-close></div>
+        <div class="support-panel" role="document">
+            <button class="support-close" data-close aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="support-body">
+                <div class="support-badge">
+                    <svg viewBox="2 7 20 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/>
+                    </svg>
+                </div>
+
+                <h2 id="supportTitle" class="support-title">Enjoying vijay.tools?</h2>
+                <p class="support-sub">If this saved you a trip to the CA, a chai goes a long way to keep these tools free &amp; open.</p>
+
+                <div class="support-amounts">
+                    <a id="amount49" class="support-amount" href="#">
+                        <span class="support-amount-label">Chai</span>
+                        <span class="support-amount-value">₹49</span>
+                    </a>
+                    <a id="amount99" class="support-amount" href="#">
+                        <span class="support-amount-label">Coffee</span>
+                        <span class="support-amount-value">₹99</span>
+                    </a>
+                </div>
+
+                <div class="support-qr-wrap">
+                    <p class="support-qr-label">Or scan with any UPI app</p>
+                    <div class="support-qr">
+                        <img src="https://raw.githubusercontent.com/vijaygupta18/system-design-simulator/main/public/support-upi-qr.jpg" alt="UPI QR code — scan to support Vijay Gupta" loading="lazy"/>
+                    </div>
+                </div>
+
+                <button id="supportCopyBtn" class="support-copy" type="button">
+                    <span id="supportUpiId">vijaygupta1818@ptyes</span>
+                    <svg id="supportCopyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                </button>
+
+                <p class="support-hint">Pay what feels right · No pressure · No ads</p>
+
+                <div class="support-foot">
+                    <span>Built with</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.5-7-10a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-7 10-7 10z"/></svg>
+                    <span>by <strong>Vijay Gupta</strong></span>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-</html> 
+</html>
